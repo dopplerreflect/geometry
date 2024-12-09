@@ -8,8 +8,5 @@
   "scripts": {
     "test": "exit 0"
   },
-  "license": "MIT",
-  "publishConfig": {
-    "@dopplerreflect:registry": "https://npm.pkg.github.com"
-  }
+  "license": "MIT"
 }

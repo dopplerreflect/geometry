@@ -1,4 +1,7 @@
-export type Point = [number, number];
+export type Point = {
+  x: number;
+  y: number;
+};
 export type Line = [Point, Point];
 export type Circle = {
   cx: number;

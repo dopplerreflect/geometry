@@ -5,22 +5,22 @@ export function radialPoint(
   radius: number,
   options?: GeometryOptions,
 ): Point {
-  let center = options?.center || [0, 0];
+  let center = options?.center || { x: 0, y: 0 };
   let rotate = options?.rotate || 0;
-  return [
-    Number(
+  return {
+    x: Number(
       (
-        center[0] +
+        center.x +
         radius * Math.cos((angle + rotate) * (Math.PI / 180))
       ).toFixed(5),
     ),
-    Number(
+    y: Number(
       (
-        center[1] +
+        center.y +
         radius * Math.sin((angle + rotate) * (Math.PI / 180))
       ).toFixed(5),
     ),
-  ];
+  };
 }
 
 export function radialPointString(
@@ -30,5 +30,5 @@ export function radialPointString(
   px: "" | "px" = "",
 ): string {
   let point: Point = radialPoint(angle, radius, options);
-  return `${point[0]}${px} ${point[1]}${px}`;
+  return `${point.x}${px} ${point.y}${px}`;
 }

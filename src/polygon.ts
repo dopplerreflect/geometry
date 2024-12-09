@@ -20,7 +20,7 @@ export function polygonPath(
   return (
     polygon(count, radius, options)
       .map((point: Point, i: number) => {
-        return `${i === 0 ? "M" : " "}${point[0]},${point[1]}`;
+        return `${i === 0 ? "M" : " "}${point.x} ${point.y}`;
       })
       .join("") + "Z"
   );
