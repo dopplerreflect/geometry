@@ -4,8 +4,8 @@ export type Point = {
 };
 export type Line = [Point, Point];
 export type Circle = {
-  cx: number;
-  cy: number;
+  x: number;
+  y: number;
   r: number;
 };
 
