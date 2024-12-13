@@ -1,26 +1,53 @@
 import type { Line, Point } from "./types";
 
-export const intersection = (line1: Line, line2: Line): Point => {
-  const [{ x: x1, y: y1 }, { x: x2, y: y2 }] = line1;
-  const [{ x: x3, y: y3 }, { x: x4, y: y4 }] = line2;
-  const d = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+// generated with perplexity.ai
+// https://www.perplexity.ai/search/can-you-write-some-typescript-TL9p1a7bQ.C3CjBMCOVFmg
 
-  let x = Number(
-    (
-      ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) /
-      d
-    ).toFixed(1),
-  );
+export function findLineIntersections(lines: Line[]): Point[] {
+  const intersections: Point[] = [];
+  const seen = new Set<string>();
 
-  let y = Number(
-    (
-      ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) /
-      d
-    ).toFixed(2),
-  );
+  for (let i = 0; i < lines.length; i++) {
+    for (let j = i + 1; j < lines.length; j++) {
+      const intersection = lineIntersection(lines[i], lines[j]);
+      if (intersection) {
+        const key = `${intersection.x.toFixed(0)},${intersection.y.toFixed(
+          0,
+        )}`.replace("-0", "0"); // fixed by me to decrease js' sloppy precision and eliminate dupes
+        if (!seen.has(key)) {
+          intersections.push(intersection);
+          seen.add(key);
+        }
+      }
+    }
+  }
 
-  // if (x === -0) x = 0;
-  // if (y === -0) y = 0;
+  return intersections;
+}
 
-  return { x, y };
-};
+function lineIntersection(line1: Line, line2: Line): Point | null {
+  const [p1, p2] = line1;
+  const [p3, p4] = line2;
+
+  const denominator =
+    (p1.x - p2.x) * (p3.y - p4.y) - (p1.y - p2.y) * (p3.x - p4.x);
+
+  if (Math.abs(denominator) < 1e-9) {
+    return null; // Lines are parallel or coincident
+  }
+
+  const t =
+    ((p1.x - p3.x) * (p3.y - p4.y) - (p1.y - p3.y) * (p3.x - p4.x)) /
+    denominator;
+  const u =
+    -((p1.x - p2.x) * (p1.y - p3.y) - (p1.y - p2.y) * (p1.x - p3.x)) /
+    denominator;
+
+  if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
+    const x = p1.x + t * (p2.x - p1.x);
+    const y = p1.y + t * (p2.y - p1.y);
+    return { x, y };
+  }
+
+  return null; // Lines don't intersect within the segments
+}
