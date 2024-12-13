@@ -1,6 +1,6 @@
 {
   "name": "@dopplerreflect/geometry",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Typescript lib for varios geometry tasks.",
   "author": "dopplerreflect@gmail.com",
   "main": "src/index.ts",
