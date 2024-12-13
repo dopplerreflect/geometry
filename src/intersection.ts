@@ -1,9 +1,6 @@
 import type { Line, Point } from "./types";
 
-export function findLineIntersections(
-  lines: Line[],
-  precision?: number,
-): Point[] {
+export function findLineIntersections(lines: Line[]): Point[] {
   const intersections: Point[] = [];
   const seen = new Set<string>();
 
