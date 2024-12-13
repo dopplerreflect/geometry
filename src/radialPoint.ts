@@ -1,25 +1,32 @@
 import type { GeometryOptions, Point } from "./types";
-
+import { Decimal } from "decimal.js";
 export function radialPoint(
   angle: number,
   radius: number,
   options?: GeometryOptions,
 ): Point {
-  let center = options?.center || { x: 0, y: 0 };
-  let rotate = options?.rotate || 0;
+  let center = options?.center ?? { x: 0, y: 0 };
+  let rotate = options?.rotate ?? 0;
+  let a = new Decimal(angle);
+  let r = new Decimal(radius);
+  let cx = new Decimal(center.x);
+  let cy = new Decimal(center.y);
+
   return {
-    x: Number(
-      (
-        center.x +
-        radius * Math.cos((angle + rotate) * (Math.PI / 180))
-      ).toFixed(5),
-    ),
-    y: Number(
-      (
-        center.y +
-        radius * Math.sin((angle + rotate) * (Math.PI / 180))
-      ).toFixed(5),
-    ),
+    x: cx
+      .plus(
+        r.times(
+          Decimal.cos(a.plus(rotate).times(new Decimal(Math.PI).div(180))),
+        ),
+      )
+      .toNumber(),
+    y: cy
+      .plus(
+        r.times(
+          Decimal.sin(a.plus(rotate).times(new Decimal(Math.PI).div(180))),
+        ),
+      )
+      .toNumber(),
   };
 }
 

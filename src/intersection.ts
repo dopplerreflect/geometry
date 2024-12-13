@@ -1,9 +1,9 @@
 import type { Line, Point } from "./types";
 
-// generated with perplexity.ai
-// https://www.perplexity.ai/search/can-you-write-some-typescript-TL9p1a7bQ.C3CjBMCOVFmg
-
-export function findLineIntersections(lines: Line[]): Point[] {
+export function findLineIntersections(
+  lines: Line[],
+  precision?: number,
+): Point[] {
   const intersections: Point[] = [];
   const seen = new Set<string>();
 
@@ -11,9 +11,7 @@ export function findLineIntersections(lines: Line[]): Point[] {
     for (let j = i + 1; j < lines.length; j++) {
       const intersection = lineIntersection(lines[i], lines[j]);
       if (intersection) {
-        const key = `${intersection.x.toFixed(0)},${intersection.y.toFixed(
-          0,
-        )}`.replace("-0", "0"); // fixed by me to decrease js' sloppy precision and eliminate dupes
+        const key = `${round(intersection.x)},${round(intersection.y)}`;
         if (!seen.has(key)) {
           intersections.push(intersection);
           seen.add(key);
@@ -23,6 +21,10 @@ export function findLineIntersections(lines: Line[]): Point[] {
   }
 
   return intersections;
+}
+
+function round(value: number): number {
+  return Number(value.toFixed(9)); // Reduced precision to avoid duplicates
 }
 
 function lineIntersection(line1: Line, line2: Line): Point | null {

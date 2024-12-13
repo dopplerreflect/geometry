@@ -1,12 +1,15 @@
 {
   "name": "@dopplerreflect/geometry",
   "version": "0.0.3",
-  "description": "Typescript lib for varios geometry tasks.",
   "author": "dopplerreflect@gmail.com",
   "main": "src/index.ts",
-  "type": "module",
+  "dependencies": {
+    "decimal.js": "^10.4.3"
+  },
+  "description": "Typescript lib for varios geometry tasks.",
+  "license": "MIT",
   "scripts": {
     "test": "exit 0"
   },
-  "license": "MIT"
+  "type": "module"
 }
