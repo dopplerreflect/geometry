@@ -1,3 +1,5 @@
+export * from "./types";
+
 export * from "./anglesArray";
 export * from "./calculateDistance";
 export * from "./constants";
