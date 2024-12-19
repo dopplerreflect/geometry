@@ -2,10 +2,10 @@ export type Point = {
   x: number;
   y: number;
 };
+
 export type Line = [Point, Point];
-export type Circle = {
-  x: number;
-  y: number;
+
+export type Circle = Point & {
   r: number;
 };
 
