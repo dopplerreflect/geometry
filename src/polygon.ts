@@ -1,6 +1,7 @@
-import type { GeometryOptions, Point } from "./types";
+import type { Circle, GeometryOptions, Point } from "./types";
 import { anglesArray } from "./anglesArray";
-import { radialPoint } from "./radialPoint";
+import { radialPoint, radialPointString } from "./radialPoint";
+import { phi } from "./constants";
 
 type Polygon = Point[];
 
@@ -24,4 +25,21 @@ export function polygonPath(
       })
       .join("") + "Z"
   );
+}
+
+export function starPoints(
+  circle: Circle,
+  rotateToOrigin: boolean = true,
+): string {
+  const rotate = rotateToOrigin
+    ? Math.atan2(circle.y, circle.x) * (180 / Math.PI)
+    : 90;
+  const angles = anglesArray(10, rotate);
+  return angles
+    .map((a, i) =>
+      radialPointString(a, i % 2 === 1 ? circle.r : circle.r * phi ** 2, {
+        center: { ...circle },
+      }),
+    )
+    .join(" ");
 }
