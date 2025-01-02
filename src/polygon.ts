@@ -32,12 +32,14 @@ export function starPoints(
   rotateToOrigin: boolean = true,
 ): string {
   const rotate = rotateToOrigin
-    ? Math.atan2(circle.y, circle.x) * (180 / Math.PI)
-    : 90;
+    ? (Math.atan2(circle.y, circle.x) * (180 / Math.PI)) % 72
+    : undefined;
   const angles = anglesArray(10, rotate);
+  const r = circle.r,
+    r2 = circle.r * phi ** 2;
   return angles
     .map((a, i) =>
-      radialPointString(a, i % 2 === 1 ? circle.r : circle.r * phi ** 2, {
+      radialPointString(a, i % 2 === 0 ? r : r2, {
         center: { ...circle },
       }),
     )
