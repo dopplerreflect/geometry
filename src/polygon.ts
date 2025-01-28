@@ -5,16 +5,23 @@ import { phi } from "./constants";
 
 type Polygon = Point[];
 
+export function findCentroid(polygon: Polygon): Point {
+  return polygon.reduce(
+    (acc, point) => {
+      acc.x += point.x;
+      acc.y += point.y;
+      return acc;
+    },
+    { x: 0, y: 0 },
+  );
+}
+
 export function polygon(
   count: number,
   radius: number,
   options?: GeometryOptions,
 ): Polygon {
   return anglesArray(count).map(angle => radialPoint(angle, radius, options));
-}
-
-export function polygonPointString(polygon: Polygon): string {
-  return polygon.map(p => `${p.x} ${p.y}`).join(" ");
 }
 
 export function polygonPath(
@@ -31,15 +38,8 @@ export function polygonPath(
   );
 }
 
-export function findCentroid(polygon: Polygon): Point {
-  return polygon.reduce(
-    (acc, point) => {
-      acc.x += point.x;
-      acc.y += point.y;
-      return acc;
-    },
-    { x: 0, y: 0 },
-  );
+export function polygonPointString(polygon: Polygon): string {
+  return polygon.map(p => `${p.x} ${p.y}`).join(" ");
 }
 
 export function shrinkPolygon(polygon: Polygon, percentage: number): Polygon {
