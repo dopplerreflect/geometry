@@ -13,6 +13,10 @@ export function polygon(
   return anglesArray(count).map(angle => radialPoint(angle, radius, options));
 }
 
+export function polygonPointString(polygon: Polygon): string {
+  return polygon.map(p => `${p.x} ${p.y}`).join(" ");
+}
+
 export function polygonPath(
   count: number,
   radius: number,
@@ -25,6 +29,30 @@ export function polygonPath(
       })
       .join("") + "Z"
   );
+}
+
+export function findCentroid(polygon: Polygon): Point {
+  return polygon.reduce(
+    (acc, point) => {
+      acc.x += point.x;
+      acc.y += point.y;
+      return acc;
+    },
+    { x: 0, y: 0 },
+  );
+}
+
+export function shrinkPolygon(polygon: Polygon, percentage: number): Polygon {
+  const centroid = findCentroid(polygon);
+  centroid.x /= polygon.length;
+  centroid.y /= polygon.length;
+
+  const shrinkFactor = 1 - percentage / 100;
+
+  return polygon.map(point => ({
+    x: centroid.x + (point.x - centroid.x) * shrinkFactor,
+    y: centroid.y + (point.y - centroid.y) * shrinkFactor,
+  }));
 }
 
 export function starPoints(
