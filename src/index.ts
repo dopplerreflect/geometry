@@ -12,3 +12,4 @@ export * from "./intersection";
 export * from "./phylotaxis";
 export * from "./polygon";
 export * from "./radialPoint";
+export * from "./utils";

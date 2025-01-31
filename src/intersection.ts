@@ -1,4 +1,42 @@
-import type { Line, Point } from "./types";
+import type { Circle, Line, Point } from "./types";
+
+export function findCircleIntersections(circles: Circle[]): Point[] {
+  const intersections: Point[] = [];
+
+  for (let i = 0; i < circles.length; i++) {
+    for (let j = i + 1; j < circles.length; j++) {
+      const c1 = circles[i];
+      const c2 = circles[j];
+
+      const d = Math.sqrt((c2.x - c1.x) ** 2 + (c2.y - c1.y) ** 2);
+
+      // Check if circles are too far apart or one is contained within the other
+      if (d > c1.r + c2.r || d < Math.abs(c1.r - c2.r)) {
+        continue; // No intersection
+      }
+
+      const a = (c1.r ** 2 - c2.r ** 2 + d ** 2) / (2 * d);
+      const h = Math.sqrt(c1.r ** 2 - a ** 2);
+
+      const x0 = c1.x + (a * (c2.x - c1.x)) / d;
+      const y0 = c1.y + (a * (c2.y - c1.y)) / d;
+
+      const intersection1: Point = {
+        x: x0 + (h * (c2.y - c1.y)) / d,
+        y: y0 - (h * (c2.x - c1.x)) / d,
+      };
+
+      const intersection2: Point = {
+        x: x0 - (h * (c2.y - c1.y)) / d,
+        y: y0 + (h * (c2.x - c1.x)) / d,
+      };
+
+      intersections.push(intersection1, intersection2);
+    }
+  }
+
+  return intersections;
+}
 
 export function findLineIntersections(lines: Line[]): Point[] {
   const intersections: Point[] = [];
