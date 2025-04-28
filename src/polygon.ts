@@ -85,7 +85,6 @@ export function polygonFromIntersectionOfLines(
   for (let i = 0; i < lineIndices.length - 1; i++) {
     let input = [lineArray[lineIndices[i]], lineArray[lineIndices[i + 1]]];
     let point = lineIntersection(input[0], input[1], true);
-    console.log(point);
     if (point) {
       result.push(pointToString(point));
     }
