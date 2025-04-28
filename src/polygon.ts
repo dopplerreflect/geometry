@@ -1,7 +1,10 @@
-import type { Circle, GeometryOptions, Point } from "./types";
+import type { Circle, GeometryOptions, Line, Point } from "./types";
 import { anglesArray } from "./anglesArray";
 import { radialPoint, radialPointString } from "./radialPoint";
 import { phi } from "./constants";
+
+import { pointToString } from "./utils";
+import { lineIntersection } from "./intersection";
 
 type Polygon = Point[];
 
@@ -72,4 +75,20 @@ export function starPoints(
       }),
     )
     .join(" ");
+}
+
+export function polygonFromIntersectionOfLines(
+  lineIndices: number[],
+  lineArray: Line[],
+): string {
+  const result = [];
+  for (let i = 0; i < lineIndices.length - 1; i++) {
+    let input = [lineArray[lineIndices[i]], lineArray[lineIndices[i + 1]]];
+    let point = lineIntersection(input[0], input[1], true);
+    console.log(point);
+    if (point) {
+      result.push(pointToString(point));
+    }
+  }
+  return result.join(" ");
 }

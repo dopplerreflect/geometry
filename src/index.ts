@@ -10,6 +10,7 @@ export * from "./findNearest";
 export * from "./golden";
 export * from "./intersection";
 export * from "./phylotaxis";
+export * from "./points";
 export * from "./polygon";
 export * from "./radialPoint";
 export * from "./utils";
