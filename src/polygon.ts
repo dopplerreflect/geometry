@@ -9,7 +9,7 @@ import { lineIntersection } from "./intersection";
 type Polygon = Point[];
 
 export function findCentroid(polygon: Polygon): Point {
-  return polygon.reduce(
+  const totals = polygon.reduce(
     (acc, point) => {
       acc.x += point.x;
       acc.y += point.y;
@@ -17,6 +17,9 @@ export function findCentroid(polygon: Polygon): Point {
     },
     { x: 0, y: 0 },
   );
+  const x = totals.x / polygon.length;
+  const y = totals.y / polygon.length;
+  return { x, y };
 }
 
 export function polygon(
@@ -24,7 +27,7 @@ export function polygon(
   radius: number,
   options?: GeometryOptions,
 ): Polygon {
-  return anglesArray(count).map(angle => radialPoint(angle, radius, options));
+  return anglesArray(count).map((angle) => radialPoint(angle, radius, options));
 }
 
 export function polygonPath(
@@ -42,17 +45,17 @@ export function polygonPath(
 }
 
 export function polygonPointString(polygon: Polygon): string {
-  return polygon.map(p => `${p.x} ${p.y}`).join(" ");
+  return polygon.map((p) => `${p.x} ${p.y}`).join(" ");
 }
 
 export function shrinkPolygon(polygon: Polygon, percentage: number): Polygon {
   const centroid = findCentroid(polygon);
-  centroid.x /= polygon.length;
-  centroid.y /= polygon.length;
+  // centroid.x /= polygon.length;
+  // centroid.y /= polygon.length;
 
   const shrinkFactor = 1 - percentage / 100;
 
-  return polygon.map(point => ({
+  return polygon.map((point) => ({
     x: centroid.x + (point.x - centroid.x) * shrinkFactor,
     y: centroid.y + (point.y - centroid.y) * shrinkFactor,
   }));
