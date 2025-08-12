@@ -1,6 +1,9 @@
 import type { Circle, Line, Point } from "./types";
 
-export function findCircleIntersections(circles: Circle[]): Point[] {
+export function findCircleIntersections(
+  circles: Circle[],
+  sort?: "x-asc" | "x-desc" | "y-asc" | "y-desc" | "angle-asc" | "angle-desc",
+): Point[] {
   const intersections: Point[] = [];
 
   for (let i = 0; i < circles.length; i++) {
@@ -31,7 +34,108 @@ export function findCircleIntersections(circles: Circle[]): Point[] {
         y: y0 + (h * (c2.x - c1.x)) / d,
       };
 
-      intersections.push(intersection1, intersection2);
+      let pair = [intersection1, intersection2];
+
+      if (sort) {
+        pair.sort((a, b) => {
+          switch (sort) {
+            case "x-asc":
+              return a.x - b.x;
+            case "x-desc":
+              return b.x - a.x;
+            case "y-asc":
+              return a.y - b.y;
+            case "y-desc":
+              return b.y - a.y;
+            case "angle-asc":
+              return (
+                Math.atan2(a.y - c1.y, a.x - c1.x) -
+                Math.atan2(b.y - c1.y, b.x - c1.x)
+              );
+            case "angle-desc":
+              return (
+                Math.atan2(b.y - c1.y, b.x - c1.x) -
+                Math.atan2(a.y - c1.y, a.x - c1.x)
+              );
+            default:
+              return 0;
+          }
+        });
+      }
+
+      intersections.push(...pair);
+    }
+  }
+
+  return intersections;
+}
+
+export function mapCircleIntersections(
+  circles: Circle[],
+  sort?: "x-asc" | "x-desc" | "y-asc" | "y-desc" | "angle-asc" | "angle-desc",
+): Map<string, Point> {
+  const intersections: Map<string, Point> = new Map();
+
+  for (let i = 0; i < circles.length; i++) {
+    for (let j = i + 1; j < circles.length; j++) {
+      const c1 = circles[i];
+      const c2 = circles[j];
+
+      const d = Math.sqrt((c2.x - c1.x) ** 2 + (c2.y - c1.y) ** 2);
+
+      // Check if circles are too far apart or one is contained within the other
+      if (d > c1.r + c2.r || d < Math.abs(c1.r - c2.r)) {
+        continue; // No intersection
+      }
+
+      const a = (c1.r ** 2 - c2.r ** 2 + d ** 2) / (2 * d);
+      const h = Math.sqrt(c1.r ** 2 - a ** 2);
+
+      const x0 = c1.x + (a * (c2.x - c1.x)) / d;
+      const y0 = c1.y + (a * (c2.y - c1.y)) / d;
+
+      const intersection1: Point = {
+        x: x0 + (h * (c2.y - c1.y)) / d,
+        y: y0 - (h * (c2.x - c1.x)) / d,
+      };
+
+      const intersection2: Point = {
+        x: x0 - (h * (c2.y - c1.y)) / d,
+        y: y0 + (h * (c2.x - c1.x)) / d,
+      };
+
+      let pair = [intersection1, intersection2];
+
+      if (sort) {
+        pair.sort((a, b) => {
+          switch (sort) {
+            case "x-asc":
+              return a.x - b.x;
+            case "x-desc":
+              return b.x - a.x;
+            case "y-asc":
+              return a.y - b.y;
+            case "y-desc":
+              return b.y - a.y;
+            case "angle-asc":
+              return (
+                Math.atan2(a.y - c1.y, a.x - c1.x) -
+                Math.atan2(b.y - c1.y, b.x - c1.x)
+              );
+            case "angle-desc":
+              return (
+                Math.atan2(b.y - c1.y, b.x - c1.x) -
+                Math.atan2(a.y - c1.y, a.x - c1.x)
+              );
+            default:
+              return 0;
+          }
+        });
+      }
+
+      // intersections.push(...pair);
+      intersections.set(`${i}.${j}.0`, pair[0]);
+      intersections.set(`${i}.${j}.1`, pair[1]);
     }
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "@dopplerreflect/geometry",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "author": "dopplerreflect@gmail.com",
   "main": "src/index.ts",
   "dependencies": {
