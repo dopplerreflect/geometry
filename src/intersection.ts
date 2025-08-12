@@ -70,8 +70,10 @@ export function findCircleIntersections(
   return intersections;
 }
 
+export type AnnotatedCircle = Circle & { ai: number | string; ri: number };
+
 export function mapCircleIntersections(
-  circles: Circle[],
+  circles: AnnotatedCircle[],
   sort?: "x-asc" | "x-desc" | "y-asc" | "y-desc" | "angle-asc" | "angle-desc",
 ): Map<string, Point> {
   const intersections: Map<string, Point> = new Map();
@@ -134,8 +136,10 @@ export function mapCircleIntersections(
       }
 
       // intersections.push(...pair);
-      intersections.set(`${i}.${j}.0`, pair[0]);
-      intersections.set(`${i}.${j}.1`, pair[1]);
+      // intersections.set(`${i}.${j}.0`, pair[0]);
+      // intersections.set(`${i}.${j}.1`, pair[1]);
+      intersections.set(`${c1.ai}.${c1.ri}-${c2.ai}.${c2.ri}:0`, pair[0]);
+      intersections.set(`${c1.ai}.${c1.ri}-${c2.ai}.${c2.ri}:1`, pair[1]);
     }
   }
 
