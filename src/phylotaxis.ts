@@ -11,7 +11,7 @@ export const phylotaxis = (
   radialPointOptions?: GeometryOptions,
 ): Point[] => {
   const pitch = radius / count;
-  return [...Array(count).keys()].map(k => {
+  return [...Array(count).keys()].map((k) => {
     const r = pitch * k;
     return radialPoint(PhyloAngle * k, r, radialPointOptions);
   });
@@ -21,11 +21,12 @@ export const phylotaxis2 = (
   count: number,
   radius: number,
   radialPointOptions?: GeometryOptions,
+  startRadius: number = 0,
 ): Point[] => {
-  const pitch = radius / count;
+  const pitch = (radius - startRadius) / count;
   const result: Point[] = [];
   for (let i = 0; i < count; i++) {
-    const r = pitch * i;
+    const r = startRadius + pitch * i;
     result.push(radialPoint(PhyloAngle * i, r, radialPointOptions));
   }
   return result;
